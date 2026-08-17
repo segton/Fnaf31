@@ -19,12 +19,14 @@ public:
     void init();
 	void update(float dt);
 	void draw() const;
-    void isOpen();
+    bool isOpen() const;
+    void toggle();
+
 private:
 	bool m_isOpen = false;
 	std::vector<Button> m_cameraButtons{};
 
     Button m_testButton{};
-
+    Button m_testButton2{};
 
 };

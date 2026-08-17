@@ -19,12 +19,6 @@ struct OfficeState
 	bool rightLightOn = false;
 };
 
-struct CCTVState
-{
-	bool isCameraPanelOpen = false;
-	bool selectedCamera = false;
-};
-
 struct NightState
 {
 	int currentHour = 12;
@@ -51,7 +45,6 @@ private:
 	OfficeCamera m_officeCamera{};
 
 	OfficeState m_officeState{};
-	CCTVState m_cctvState{};
 	NightState m_nightState{};
 
 	CCTV m_cctv{};

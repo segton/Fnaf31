@@ -7,7 +7,6 @@ void Game::init()
     m_gameState = GameState::Playing;
 
     m_officeState = {};
-    m_cctvState = {};
     m_nightState = {};
 
     m_officeCamera.init();
@@ -22,12 +21,12 @@ void Game::update()
 
     if (IsKeyPressed(KEY_SPACE))
     {
-        m_cctvState.isCameraPanelOpen = !m_cctvState.isCameraPanelOpen;
+        m_cctv.toggle();
     }
 
     if (m_gameState == GameState::Playing)
     {
-        if (!m_cctvState.isCameraPanelOpen)
+        if (!m_cctv.isOpen())
         {
             m_officeCamera.update(dt);
         }
@@ -42,7 +41,7 @@ void Game::draw() const
 {
     if (m_gameState == GameState::Playing)
     {
-        if (!m_cctvState.isCameraPanelOpen)
+        if (!m_cctv.isOpen())
         {
             drawOffice();
         }

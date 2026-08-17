@@ -10,6 +10,30 @@ bool Button::isClicked() const
     return isHovered() && IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
 }
 
+void Button::setText(const std::string& text, float fontSize)
+{
+	m_text = text;
+	m_fontSize = fontSize;
+}
+
+void Button::setButton(
+    const std::string& text, 
+    const float fontSize, 
+    const Rectangle& bounds, 
+    const Color& backgroundColor, 
+    const Color& hoverColor, 
+    const Color& textColor, 
+    const Color& borderColor)
+{
+	m_text = text;
+	m_fontSize = fontSize;
+	m_bounds = bounds;
+    m_backgroundColor = backgroundColor;
+    m_hoverColor = hoverColor;
+    m_textColor = textColor;
+    m_borderColor = borderColor;
+}
+
 void Button::draw() const
 {
     const bool hovered =
@@ -17,17 +41,16 @@ void Button::draw() const
 
     DrawRectangleRec(
         m_bounds,
-        hovered ? LIGHTGRAY : GRAY
+        hovered ? m_backgroundColor : m_hoverColor
     );
 
     DrawRectangleLinesEx(
         m_bounds,
         2.0f,
-        WHITE
+        m_borderColor
     );
 
-    const int fontSize = 20;
-    const int textWidth = MeasureText(m_text.c_str(), fontSize);
+    const int textWidth = MeasureText(m_text.c_str(), m_fontSize);
 
     const int textX =
         static_cast<int>(
@@ -36,15 +59,16 @@ void Button::draw() const
 
     const int textY =
         static_cast<int>(
-            m_bounds.y + (m_bounds.height - fontSize) / 2.0f
+            m_bounds.y + (m_bounds.height - m_fontSize) / 2.0f
             );
+	//center align text within the button bounds
 
     DrawText(
         m_text.c_str(),
         textX,
         textY,
-        fontSize,
-        BLACK
+        m_fontSize,
+        m_textColor
     );
 }
 
@@ -54,7 +78,7 @@ void Button::setPosition(float x, float y)
     m_bounds.y = y;
 }
 
-void Button::setSize(float width, float height)
+void Button::setSize(const float width, const float height)
 {
     m_bounds.width = width;
     m_bounds.height = height;
