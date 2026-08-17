@@ -1,6 +1,7 @@
 #pragma once
 #include "raylib.h"
 #include "OfficeCamera.h"
+#include "CCTV.h"
 
 enum class GameState
 {
@@ -18,10 +19,10 @@ struct OfficeState
 	bool rightLightOn = false;
 };
 
-struct CameraState
+struct CCTVState
 {
 	bool isCameraPanelOpen = false;
-	bool isCameraActive = false;
+	bool selectedCamera = false;
 };
 
 struct NightState
@@ -29,6 +30,7 @@ struct NightState
 	int currentHour = 12;
 	int currentMinute = 0;
 	int currentSecond = 0;
+	float elapsedTime = 0.0f;
 };
 
 class Game
@@ -41,14 +43,21 @@ public:
 	void shutdown() const;
 
 private:
-	OfficeCamera camera;
+	void drawOffice() const;
+	void drawCCTV() const;
 
-	OfficeState m_officeState;
-	CameraState m_cameraState;
-	NightState m_nightState;
+private:
+	GameState m_gameState = GameState::Playing;
+	OfficeCamera m_officeCamera{};
+
+	OfficeState m_officeState{};
+	CCTVState m_cctvState{};
+	NightState m_nightState{};
+
+	CCTV m_cctv{};
 
 	Vector3 m_worldOrigin = { 0.0f, 0.0f, 0.0f };
 
-	Model m_officeModel;
+	Model m_officeModel{};
 };
 

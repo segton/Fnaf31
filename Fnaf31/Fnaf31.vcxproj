@@ -148,11 +148,15 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="CCTV.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OfficeCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="CCTV.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="OfficeCamera.h" />
   </ItemGroup>
