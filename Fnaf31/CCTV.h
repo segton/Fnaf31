@@ -12,6 +12,28 @@ enum class CCTVRoom
     RightHall
 };
 
+struct CCTVButton
+{
+    Button button;
+    CCTVRoom room;
+
+    CCTVButton(
+        const Rectangle bounds,
+        const std::string& text,
+        CCTVRoom cameraRoom) : button(
+            bounds,
+            text,
+            18,
+            DARKGRAY,
+            GRAY,
+            WHITE,
+            LIGHTGRAY
+        ),
+        room(cameraRoom)
+    {
+    }
+};
+
 class CCTV
 {
 public:
@@ -23,10 +45,10 @@ public:
     void toggle();
 
 private:
-	bool m_isOpen = false;
-	std::vector<Button> m_cameraButtons{};
+    CCTVRoom m_selectedRoom = CCTVRoom::MainStage;
 
-    Button m_testButton{};
-    Button m_testButton2{};
+	bool m_isOpen = false;
+	std::vector<CCTVButton> m_cameraButtons{};
+
 
 };

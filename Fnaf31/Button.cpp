@@ -1,38 +1,36 @@
 #include "Button.h"
 
+
+Button::Button(Rectangle bounds,
+    const std::string& text,
+    const int fontSize,
+    const Color& backgroundColor,
+    const Color& hoverColor,
+    const Color& textColor,
+    const Color& borderColor) :
+    m_bounds{ bounds }, m_text{ text }, m_fontSize{fontSize}, 
+    m_backgroundColor{backgroundColor}, m_hoverColor{hoverColor},
+    m_textColor{textColor}, m_borderColor{borderColor}
+{
+}
+
 bool Button::isHovered() const
 {
 	return CheckCollisionPointRec(GetMousePosition(), m_bounds);
 }
+
 
 bool Button::isClicked() const
 {
     return isHovered() && IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
 }
 
-void Button::setText(const std::string& text, float fontSize)
+void Button::setText(const std::string& text, int fontSize)
 {
 	m_text = text;
 	m_fontSize = fontSize;
 }
 
-void Button::setButton(
-    const std::string& text, 
-    const float fontSize, 
-    const Rectangle& bounds, 
-    const Color& backgroundColor, 
-    const Color& hoverColor, 
-    const Color& textColor, 
-    const Color& borderColor)
-{
-	m_text = text;
-	m_fontSize = fontSize;
-	m_bounds = bounds;
-    m_backgroundColor = backgroundColor;
-    m_hoverColor = hoverColor;
-    m_textColor = textColor;
-    m_borderColor = borderColor;
-}
 
 void Button::draw() const
 {
@@ -41,14 +39,12 @@ void Button::draw() const
 
     DrawRectangleRec(
         m_bounds,
-        hovered ? m_backgroundColor : m_hoverColor
-    );
+        hovered ? m_hoverColor : m_backgroundColor);
 
     DrawRectangleLinesEx(
         m_bounds,
         2.0f,
-        m_borderColor
-    );
+        m_borderColor);
 
     const int textWidth = MeasureText(m_text.c_str(), m_fontSize);
 
@@ -68,8 +64,7 @@ void Button::draw() const
         textX,
         textY,
         m_fontSize,
-        m_textColor
-    );
+        m_textColor);
 }
 
 void Button::setPosition(float x, float y)

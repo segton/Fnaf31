@@ -3,28 +3,62 @@
 
 void CCTV::init()
 {
-	m_testButton.setPosition(100.0f, 100.0f);
-	m_testButton.setSize(200.0f, 50.0f);
-	m_testButton.setText("Test Button asdadasdadadsdsa",30.f);
-	
-	m_testButton2.setButton("Test2", 50.f, { 200.f, 200.f, 80.f, 80.f });
+    m_cameraButtons.clear();
+    m_cameraButtons.reserve(6);
+
+    m_cameraButtons.emplace_back(
+        Rectangle{ 625.0f, 360.0f, 70.0f, 32.0f },
+        "CAM 01",
+        CCTVRoom::MainStage);
+
+    m_cameraButtons.emplace_back(
+        Rectangle{ 545.0f, 405.0f, 70.0f, 32.0f },
+        "CAM 02",
+        CCTVRoom::FoodCourt);
+
+    m_cameraButtons.emplace_back(
+        Rectangle{ 705.0f, 405.0f, 70.0f, 32.0f },
+        "CAM 03",
+        CCTVRoom::GameStalls);
+
+    m_cameraButtons.emplace_back(
+        Rectangle{ 625.0f, 405.0f, 70.0f, 32.0f },
+        "CAM 04",
+        CCTVRoom::MainHall);
+
+    m_cameraButtons.emplace_back(
+        Rectangle{ 585.0f, 450.0f, 70.0f, 32.0f },
+        "CAM 05",
+        CCTVRoom::LeftHall);
+
+    m_cameraButtons.emplace_back(
+        Rectangle{ 665.0f, 450.0f, 70.0f, 32.0f },
+        "CAM 06",
+        CCTVRoom::RightHall);
+
 }
 
 void CCTV::update(float dt)
 {
-	if (m_testButton.isClicked())
-	{
-		std::cout << "Test button clicked!" << std::endl;
-	}
+    for (CCTVButton& camera : m_cameraButtons)
+    {
+        if (camera.room == m_selectedRoom)
+        {
+            continue;
+        }
+
+        if (camera.button.isClicked())
+        {
+            m_selectedRoom = camera.room;
+        }
+    }
 }
 
 void CCTV::draw() const
 {
-	m_testButton.draw();
-	m_testButton2.draw();
-	for (const Button& button : m_cameraButtons)
+	for (const CCTVButton& b : m_cameraButtons)
 	{
-		button.draw();
+		b.button.draw();
 	}
 }
 
