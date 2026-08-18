@@ -4,6 +4,7 @@
 #include "CCTV.h"
 #include "Enemy.h"
 #include "DurianEnemy.h"
+#include "EnemyContext.h"
 
 enum class GameState
 {
@@ -54,6 +55,10 @@ private:
 	Vector3 m_worldOrigin = { 0.0f, 0.0f, 0.0f };
 
 	Model m_officeModel{};
+
+
+	//enemy
+	EnemyContext enemyContext{ false ,false,false,Room::MainHall};
 
 	DurianEnemy durian{ Room::MainStage, 7, 5.f };
 };

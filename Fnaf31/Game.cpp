@@ -1,5 +1,5 @@
 #include "Game.h"
-
+#include <iostream>
 
 
 void Game::init()
@@ -12,9 +12,9 @@ void Game::init()
     m_officeCamera.init();
     m_cctv.init();
 
-    durian = { Room::MainStage, 7, 5.f };
+    durian = { Room::MainStage, 20, 1.f };
 
-    m_officeModel = LoadModel("Assets/3D/Office.glb");
+    m_officeModel = LoadModel("Assets/3D/Office2.glb");
 }
 
 void Game::update()
@@ -28,17 +28,34 @@ void Game::update()
 
     if (m_gameState == GameState::Playing)
     {
-        durian.update(dt);
+        durian.update(dt,enemyContext);
 
         if (!m_cctv.isOpen())
         {
             m_officeCamera.update(dt);
+            if (IsKeyPressed(KEY_A))
+            {
+                m_officeState.leftDoorClosed = !m_officeState.leftDoorClosed;
+                std::cout << "Left door is " << (m_officeState.leftDoorClosed ? "closed\n" : "opened\n");
+            }
+
+            if (IsKeyPressed(KEY_D))
+            {
+                m_officeState.rightDoorClosed = !m_officeState.rightDoorClosed;
+                std::cout << "Right door is " << (m_officeState.rightDoorClosed ? "closed\n" : "opened\n");
+            }
+
         }
         else
         {
 			m_cctv.update(dt);
             m_cctv.handleInput();
         }
+
+        enemyContext.leftDoorClosed = m_officeState.leftDoorClosed;
+        enemyContext.rightDoorClosed = m_officeState.rightDoorClosed;
+        enemyContext.cctvOpen = m_cctv.isOpen();
+        enemyContext.selectedRoom = m_cctv.getSelectedRoom();
     }
 }
 

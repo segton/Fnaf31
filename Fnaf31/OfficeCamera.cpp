@@ -3,8 +3,8 @@
 
 void OfficeCamera::init()
 {
-    m_officeCamera.position = Vector3{ 0.0f, 3.9781f, 24.172f };  // Camera position
-    m_officeCamera.target = Vector3{ 0.0f, 2.8565f, 14.2351f };
+    m_officeCamera.position = Vector3{ 0.0f, 4.2f, 24.172f };  // Camera position
+    m_officeCamera.target = Vector3{ 0.0f, 4.2f, 14.2351f };
     m_officeCamera.up = Vector3{ 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
     m_officeCamera.fovy = 32.0f;                                // Camera field-of-view Y
     m_officeCamera.projection = CAMERA_PERSPECTIVE;

@@ -11,3 +11,7 @@ enum class Room
     LeftDoor,
     RightDoor
 };
+
+
+const char* roomName(Room room);
+

@@ -1,5 +1,6 @@
 #pragma once
 #include "Room.h"
+#include "EnemyContext.h"
 #include <vector>
 
 class Enemy
@@ -7,7 +8,7 @@ class Enemy
 public:
     virtual ~Enemy() = default;
 
-	void update(float dt);
+	void update(float dt, const EnemyContext& enemyContext);
 
     Room getCurrentRoom() const;
     bool isActive() const;
@@ -15,7 +16,11 @@ public:
 protected:
     Enemy(Room startingRoom, int aiLevel, float movementInterval);
 
-    virtual void onMovementOpportunity() = 0;
+    virtual void onMovementOpportunity(const EnemyContext& enemyContext) = 0;
+
+    virtual void handleAttack(const EnemyContext& enemyContext) = 0;
+
+    virtual void retreat();
 
     bool rollMovement() const;
 

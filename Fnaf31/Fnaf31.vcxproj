@@ -155,12 +155,14 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OfficeCamera.cpp" />
+    <ClCompile Include="Room.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="CCTV.h" />
     <ClInclude Include="DurianEnemy.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyContext.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="OfficeCamera.h" />
     <ClInclude Include="Random.h" />
