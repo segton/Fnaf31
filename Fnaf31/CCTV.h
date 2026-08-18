@@ -1,29 +1,19 @@
 #pragma once
 #include <vector>
+#include <string>
 #include "Button.h"
-
-enum class CCTVRoom
-{
-    MainStage,
-    FoodCourt,
-    GameStalls,
-    MainHall,
-    LeftHall,
-    RightHall
-};
+#include "Room.h"
 
 struct CCTVButton
 {
     Button button;
-    CCTVRoom room;
+    Room room;
 
     Color bgColor = DARKGRAY; //default background color
     Color hoverColor = GRAY; //default hover color
 
     CCTVButton(
-        const Rectangle bounds,
-        const std::string& text,
-        CCTVRoom cameraRoom) : button(
+        const Rectangle bounds, const std::string& text, Room cameraRoom) : button(
             bounds,
             text,
             18,
@@ -48,15 +38,15 @@ public:
     void toggle();
     void handleInput();
 
-    CCTVRoom getSelectedRoom() const;
+    Room getSelectedRoom() const;
 
 private:
     void drawSelectedRooms() const;
 
-    void selectRoom(const CCTVRoom& room);
+    void selectRoom(const Room& room);
     void refreshButtons();
 private:
-    CCTVRoom m_selectedRoom = CCTVRoom::MainStage;
+    Room  m_selectedRoom = Room::MainStage;
 
 	bool m_isOpen = false;
 	std::vector<CCTVButton> m_cameraButtons{};

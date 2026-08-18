@@ -9,32 +9,32 @@ void CCTV::init()
     m_cameraButtons.emplace_back(
         Rectangle{ 625.0f, 360.0f, 70.0f, 32.0f },
         "CAM 01",
-        CCTVRoom::MainStage);
+        Room::MainStage);
 
     m_cameraButtons.emplace_back(
         Rectangle{ 545.0f, 405.0f, 70.0f, 32.0f },
         "CAM 02",
-        CCTVRoom::FoodCourt);
+        Room::FoodCourt);
 
     m_cameraButtons.emplace_back(
         Rectangle{ 705.0f, 405.0f, 70.0f, 32.0f },
         "CAM 03",
-        CCTVRoom::GameStalls);
+        Room::GameStalls);
 
     m_cameraButtons.emplace_back(
         Rectangle{ 625.0f, 405.0f, 70.0f, 32.0f },
         "CAM 04",
-        CCTVRoom::MainHall);
+        Room::MainHall);
 
     m_cameraButtons.emplace_back(
         Rectangle{ 585.0f, 450.0f, 70.0f, 32.0f },
         "CAM 05",
-        CCTVRoom::LeftHall);
+        Room::LeftHall);
 
     m_cameraButtons.emplace_back(
         Rectangle{ 665.0f, 450.0f, 70.0f, 32.0f },
         "CAM 06",
-        CCTVRoom::RightHall);
+        Room::RightHall);
 
     refreshButtons();
 }
@@ -89,32 +89,32 @@ void CCTV::drawSelectedRooms() const
 {
     switch (m_selectedRoom)
     {
-    case CCTVRoom::MainStage:
+    case Room::MainStage:
         ClearBackground(DARKGRAY);
         DrawText("MAIN STAGE", 50, 50, 30, WHITE);
         break;
 
-    case CCTVRoom::FoodCourt:
+    case Room::FoodCourt:
         ClearBackground(DARKGREEN);
         DrawText("Food COURT", 50, 50, 30, WHITE);
         break;
 
-    case CCTVRoom::GameStalls:
+    case Room::GameStalls:
         ClearBackground(BROWN);
         DrawText("MAIN HALL", 50, 50, 30, WHITE);
         break;
 
-    case CCTVRoom::MainHall:
-        ClearBackground(BROWN);
-        DrawText("MAIN HALL", 50, 50, 30, WHITE);
+    case Room::MainHall:
+        ClearBackground(RED);
+        DrawText("GAME STALLS", 50, 50, 30, WHITE);
         break;
 
-    case CCTVRoom::LeftHall:
+    case Room::LeftHall:
         ClearBackground(DARKPURPLE);
         DrawText("LEFT HALL", 50, 50, 30, WHITE);
         break;
 
-    case CCTVRoom::RightHall:
+    case Room::RightHall:
         ClearBackground(MAROON);
         DrawText("RIGHT HALL", 50, 50, 30, WHITE);
         break;
@@ -126,7 +126,7 @@ void CCTV::drawSelectedRooms() const
 
 }
 
-CCTVRoom CCTV::getSelectedRoom() const
+Room CCTV::getSelectedRoom() const
 {
     return m_selectedRoom;
 }
@@ -148,7 +148,7 @@ void CCTV::handleInput()
     }
 }
 
-void CCTV::selectRoom(const CCTVRoom& room)
+void CCTV::selectRoom(const Room& room)
 {
     if (room == m_selectedRoom)
     {

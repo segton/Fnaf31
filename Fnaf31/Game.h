@@ -2,6 +2,8 @@
 #include "raylib.h"
 #include "OfficeCamera.h"
 #include "CCTV.h"
+#include "Enemy.h"
+#include "DurianEnemy.h"
 
 enum class GameState
 {
@@ -52,5 +54,7 @@ private:
 	Vector3 m_worldOrigin = { 0.0f, 0.0f, 0.0f };
 
 	Model m_officeModel{};
+
+	DurianEnemy durian{ Room::MainStage, 7, 5.f };
 };
 

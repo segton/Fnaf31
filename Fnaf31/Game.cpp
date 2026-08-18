@@ -12,6 +12,8 @@ void Game::init()
     m_officeCamera.init();
     m_cctv.init();
 
+    durian = { Room::MainStage, 7, 5.f };
+
     m_officeModel = LoadModel("Assets/3D/Office.glb");
 }
 
@@ -26,6 +28,8 @@ void Game::update()
 
     if (m_gameState == GameState::Playing)
     {
+        durian.update(dt);
+
         if (!m_cctv.isOpen())
         {
             m_officeCamera.update(dt);
@@ -57,7 +61,7 @@ void Game::drawOffice() const
 {
     BeginMode3D(m_officeCamera.getCamera());
 
-    DrawModel(m_officeModel, m_worldOrigin, 1.0f, WHITE);
+    DrawModel(m_officeModel, m_worldOrigin, 1.0f, LIGHTGRAY);
 
     EndMode3D();
 }

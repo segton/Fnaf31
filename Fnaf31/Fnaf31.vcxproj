@@ -150,6 +150,8 @@
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CCTV.cpp" />
+    <ClCompile Include="DurianEnemy.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OfficeCamera.cpp" />
@@ -157,8 +159,12 @@
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="CCTV.h" />
+    <ClInclude Include="DurianEnemy.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="OfficeCamera.h" />
+    <ClInclude Include="Random.h" />
+    <ClInclude Include="Room.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
