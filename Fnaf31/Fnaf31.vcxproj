@@ -163,6 +163,9 @@
     <ClInclude Include="DurianEnemy.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyContext.h" />
+    <ClInclude Include="EnemyInfo.h" />
+    <ClInclude Include="EnemyType.h" />
+    <ClInclude Include="EnemyView.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="OfficeCamera.h" />
     <ClInclude Include="Random.h" />

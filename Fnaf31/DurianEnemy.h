@@ -12,6 +12,8 @@ public:
 
 	void handleAttack(const EnemyContext& enemyContext) override;
 
+	EnemyType getType() const override;
+
 private:
 	void moveForward();
 	

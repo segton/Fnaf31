@@ -1,8 +1,11 @@
 #include "CCTV.h"
 #include <iostream>
+#include "Game.h"
 
-void CCTV::init()
+void CCTV::init(Game& game)
 {
+    (void)game;
+
     m_cameraButtons.clear();
     m_cameraButtons.reserve(6);
 
@@ -65,9 +68,24 @@ void CCTV::update(float dt)
 
 }
 
-void CCTV::draw() const
+void CCTV::draw(const std::vector<EnemyInfo>& enemies) const
 {
     drawSelectedRooms();
+
+    for (const EnemyInfo& enemy : enemies)
+    {
+        if (!enemy.active)
+        {
+            continue;
+        }
+
+        if (enemy.room != m_selectedRoom)
+        {
+            continue;
+        }
+
+        drawEnemy(enemy);
+    }
 
 	for (const CCTVButton& b : m_cameraButtons)
 	{
@@ -85,6 +103,7 @@ bool CCTV::isOpen() const
 	return m_isOpen;
 }
 
+
 void CCTV::drawSelectedRooms() const
 {
     switch (m_selectedRoom)
@@ -96,7 +115,7 @@ void CCTV::drawSelectedRooms() const
 
     case Room::FoodCourt:
         ClearBackground(DARKGREEN);
-        DrawText("Food COURT", 50, 50, 30, WHITE);
+        DrawText("FOOD COURT", 50, 50, 30, WHITE);
         break;
 
     case Room::GameStalls:
@@ -119,11 +138,25 @@ void CCTV::drawSelectedRooms() const
         DrawText("RIGHT HALL", 50, 50, 30, WHITE);
         break;
 
+    case Room::LeftDoor:
+        ClearBackground(MAROON);
+        break;
+
     default:
         ClearBackground(BLACK);
         DrawText("ERROR", 50, 50, 30, WHITE);
     }
 
+}
+
+void CCTV::drawEnemy(const EnemyInfo& enemyInfo) const
+{
+    switch (enemyInfo.type)
+    {
+    case EnemyType::Durian:
+        
+        break;
+    }
 }
 
 Room CCTV::getSelectedRoom() const

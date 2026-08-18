@@ -1,10 +1,12 @@
 #pragma once
+#include<memory>
 #include "raylib.h"
 #include "OfficeCamera.h"
 #include "CCTV.h"
 #include "Enemy.h"
 #include "DurianEnemy.h"
 #include "EnemyContext.h"
+#include "EnemyInfo.h"
 
 enum class GameState
 {
@@ -39,9 +41,11 @@ public:
 	void draw() const;
 	void shutdown() const;
 
+
 private:
 	void drawOffice() const;
 	void drawCCTV() const;
+	void initEnemies();
 
 private:
 	GameState m_gameState = GameState::Playing;
@@ -60,6 +64,11 @@ private:
 	//enemy
 	EnemyContext enemyContext{ false ,false,false,Room::MainHall};
 
-	DurianEnemy durian{ Room::MainStage, 7, 5.f };
+	//DurianEnemy durian{ Room::MainStage, 7, 5.f };
+
+	std::vector<std::unique_ptr<Enemy>> m_enemies;
+
+	std::vector<EnemyInfo> enemyInfo;
+
 };
 

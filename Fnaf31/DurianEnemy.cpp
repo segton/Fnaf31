@@ -44,6 +44,11 @@ void DurianEnemy::handleAttack(const EnemyContext& enemyContext)
 	}
 }
 
+EnemyType DurianEnemy::getType() const
+{
+	return EnemyType::Durian;
+}
+
 void DurianEnemy::moveForward()
 {
 	if (m_routeIndex + 1 >= m_route.size())

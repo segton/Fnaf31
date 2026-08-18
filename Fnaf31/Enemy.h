@@ -1,7 +1,8 @@
 #pragma once
+#include <vector>
 #include "Room.h"
 #include "EnemyContext.h"
-#include <vector>
+#include "EnemyType.h"
 
 class Enemy
 {
@@ -12,6 +13,8 @@ public:
 
     Room getCurrentRoom() const;
     bool isActive() const;
+
+    virtual EnemyType getType() const = 0;
 
 protected:
     Enemy(Room startingRoom, int aiLevel, float movementInterval);
