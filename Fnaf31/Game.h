@@ -36,6 +36,7 @@ class Game
 {
 public:
 	Game() = default;
+	~Game();
 	void init();
 	void update();
 	void draw() const;
@@ -68,7 +69,6 @@ private:
 
 	std::vector<std::unique_ptr<Enemy>> m_enemies;
 
-	std::vector<EnemyInfo> enemyInfo;
 
 };
 

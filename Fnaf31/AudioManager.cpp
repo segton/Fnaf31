@@ -7,6 +7,10 @@ void AudioManager::init()
 
 void AudioManager::update()
 {
+    for (auto& [id, music] : m_music)
+    {
+        UpdateMusicStream(music);
+    }
 }
 
 void AudioManager::loadSound(const std::string& id, const std::string& path)

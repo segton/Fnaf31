@@ -16,16 +16,6 @@ void Game::init()
     //create enemies
     initEnemies();
 
-    //copy enemy info into enemyInfo
-    for (const auto& enemy : m_enemies)
-    {
-        enemyInfo.push_back({
-            enemy->getType(),
-            enemy->getCurrentRoom(),
-            enemy->isActive()
-            });
-    }
-
     m_officeModel = LoadModel("Assets/3D/Office2.glb");
 }
 
@@ -115,9 +105,13 @@ void Game::drawOffice() const
 
 void Game::drawCCTV() const
 {
-	m_cctv.draw(enemyInfo);
+	m_cctv.draw(m_enemies);
 }
 
+Game::~Game()
+{
+    shutdown();
+}
 
 void Game::shutdown() const
 {

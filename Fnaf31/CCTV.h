@@ -6,7 +6,6 @@
 #include "Button.h"
 #include "Room.h"
 #include "DurianEnemy.h"
-#include "EnemyInfo.h"
 
 class Game;
 
@@ -36,10 +35,10 @@ struct CCTVButton
 class CCTV
 {
 public:
-
+    ~CCTV();
     void init(Game& game);
 	void update(float dt);
-	void draw(const std::vector<EnemyInfo>& enemies) const;
+	void draw(const std::vector<std::unique_ptr<Enemy>>& enemies) const;
     bool isOpen() const;
     void toggle();
     void handleInput();
@@ -49,7 +48,7 @@ public:
 private:
     void drawSelectedRooms() const;
 
-    void drawEnemy(const EnemyInfo& enemyInfo) const;
+    void drawEnemy(const Enemy& enemy) const;
 
     void selectRoom(const Room& room);
     void refreshButtons();
