@@ -33,6 +33,7 @@ void Game::update()
         else
         {
 			m_cctv.update(dt);
+            m_cctv.handleInput();
         }
     }
 }

@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="Fnaf31/Fnaf31.vcxproj" />
+  <Project Path="Fnaf31/Fnaf31.vcxproj" Id="2cbf7b20-862d-472a-848f-2afabe727680" />
 </Solution>

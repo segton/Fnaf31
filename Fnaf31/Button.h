@@ -16,13 +16,16 @@ public:
 		const Color& textColor = BLACK,
 		const Color& borderColor = WHITE);
 
-	bool isClicked() const;
 	void draw() const;
+
+	bool isClicked() const;
+	bool isHovered() const;
+
 	void setPosition(const float x, const float y);
 	void setSize(const float width, float height);
-	bool isHovered() const;
+	void setBackgroundColor(const Color& color);
 	void setText(const std::string& text, int fontSize);
-
+	void setHoverColor(const Color& color);
 
 private:
 	Rectangle m_bounds{}; //{ position: {x,y}, size: {width, height} }
@@ -30,8 +33,8 @@ private:
 	std::string m_text{};
 	int m_fontSize = 20;
 	Color m_textColor = BLACK;
-
 	Color m_backgroundColor = GRAY;
+	Color m_selectColor = DARKGRAY;
 	Color m_hoverColor = LIGHTGRAY;
 
 	Color m_borderColor = WHITE;

@@ -34,8 +34,7 @@ void Button::setText(const std::string& text, int fontSize)
 
 void Button::draw() const
 {
-    const bool hovered =
-        CheckCollisionPointRec(GetMousePosition(), m_bounds);
+    const bool hovered = isHovered();
 
     DrawRectangleRec(
         m_bounds,
@@ -77,4 +76,14 @@ void Button::setSize(const float width, const float height)
 {
     m_bounds.width = width;
     m_bounds.height = height;
+}
+
+void Button::setBackgroundColor(const Color& color)
+{
+    m_backgroundColor = color;
+}
+
+void Button::setHoverColor(const Color& color)
+{
+    m_hoverColor = color;
 }

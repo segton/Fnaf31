@@ -17,6 +17,9 @@ struct CCTVButton
     Button button;
     CCTVRoom room;
 
+    Color bgColor = DARKGRAY; //default background color
+    Color hoverColor = GRAY; //default hover color
+
     CCTVButton(
         const Rectangle bounds,
         const std::string& text,
@@ -24,8 +27,8 @@ struct CCTVButton
             bounds,
             text,
             18,
-            DARKGRAY,
-            GRAY,
+            bgColor,
+            hoverColor,
             WHITE,
             LIGHTGRAY
         ),
@@ -43,7 +46,15 @@ public:
 	void draw() const;
     bool isOpen() const;
     void toggle();
+    void handleInput();
 
+    CCTVRoom getSelectedRoom() const;
+
+private:
+    void drawSelectedRooms() const;
+
+    void selectRoom(const CCTVRoom& room);
+    void refreshButtons();
 private:
     CCTVRoom m_selectedRoom = CCTVRoom::MainStage;
 

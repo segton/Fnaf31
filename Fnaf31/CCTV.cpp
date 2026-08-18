@@ -36,14 +36,18 @@ void CCTV::init()
         "CAM 06",
         CCTVRoom::RightHall);
 
+    refreshButtons();
 }
 
 void CCTV::update(float dt)
 {
-    for (CCTVButton& camera : m_cameraButtons)
+    /*
+        for (CCTVButton& camera : m_cameraButtons)
     {
-        if (camera.room == m_selectedRoom)
+        if (camera.room == m_selectedRoom) //active room
         {
+            camera.button.setBackgroundColor(BLUE);
+            camera.button.setHoverColor({ 173, 216, 230, 255 });
             continue;
         }
 
@@ -51,11 +55,20 @@ void CCTV::update(float dt)
         {
             m_selectedRoom = camera.room;
         }
+        else
+        {
+            camera.button.setBackgroundColor(camera.bgColor);
+            camera.button.setHoverColor(camera.hoverColor);
+        }
     }
+    */
+
 }
 
 void CCTV::draw() const
 {
+    drawSelectedRooms();
+
 	for (const CCTVButton& b : m_cameraButtons)
 	{
 		b.button.draw();
@@ -71,3 +84,98 @@ bool CCTV::isOpen() const
 {
 	return m_isOpen;
 }
+
+void CCTV::drawSelectedRooms() const
+{
+    switch (m_selectedRoom)
+    {
+    case CCTVRoom::MainStage:
+        ClearBackground(DARKGRAY);
+        DrawText("MAIN STAGE", 50, 50, 30, WHITE);
+        break;
+
+    case CCTVRoom::FoodCourt:
+        ClearBackground(DARKGREEN);
+        DrawText("Food COURT", 50, 50, 30, WHITE);
+        break;
+
+    case CCTVRoom::GameStalls:
+        ClearBackground(BROWN);
+        DrawText("MAIN HALL", 50, 50, 30, WHITE);
+        break;
+
+    case CCTVRoom::MainHall:
+        ClearBackground(BROWN);
+        DrawText("MAIN HALL", 50, 50, 30, WHITE);
+        break;
+
+    case CCTVRoom::LeftHall:
+        ClearBackground(DARKPURPLE);
+        DrawText("LEFT HALL", 50, 50, 30, WHITE);
+        break;
+
+    case CCTVRoom::RightHall:
+        ClearBackground(MAROON);
+        DrawText("RIGHT HALL", 50, 50, 30, WHITE);
+        break;
+
+    default:
+        ClearBackground(BLACK);
+        DrawText("ERROR", 50, 50, 30, WHITE);
+    }
+
+}
+
+CCTVRoom CCTV::getSelectedRoom() const
+{
+    return m_selectedRoom;
+}
+
+void CCTV::handleInput()
+{
+    for (CCTVButton& camera : m_cameraButtons)
+    {
+        if (camera.room == m_selectedRoom)
+        {
+            continue;
+        }
+
+        if (camera.button.isClicked())
+        {
+            selectRoom(camera.room);
+            break;
+        }
+    }
+}
+
+void CCTV::selectRoom(const CCTVRoom& room)
+{
+    if (room == m_selectedRoom)
+    {
+        return;
+    }
+
+    m_selectedRoom = room;
+
+    refreshButtons();
+
+}
+
+void CCTV::refreshButtons()
+{
+    for (CCTVButton& camera : m_cameraButtons)
+    {
+        if (camera.room == m_selectedRoom) //active room
+        {
+            camera.button.setBackgroundColor(BLUE);
+            camera.button.setHoverColor({ 173, 216, 230, 255 });
+            continue;
+        }
+        else
+        {
+            camera.button.setBackgroundColor(camera.bgColor);
+            camera.button.setHoverColor(camera.hoverColor);
+        }
+    }
+}
+
