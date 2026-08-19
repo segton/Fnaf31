@@ -239,6 +239,10 @@ void Game::update()
                 }
             }
 
+            m_officeState.leftLightOn = IsKeyDown(KEY_Q);
+
+            m_officeState.rightLightOn = IsKeyDown(KEY_E);
+
         }
         else
         {
@@ -246,6 +250,8 @@ void Game::update()
             m_cctv.handleInput();
         }
 
+        //power
+        updatePower(dt);
 
     }
 }
@@ -267,11 +273,86 @@ void Game::draw() const
 
 void Game::drawOffice() const
 {
-    BeginMode3D(m_officeCamera.getCamera());
+    const Camera3D& camera =
+        m_officeCamera.getCamera();
 
-    DrawModel(m_officeModel, m_worldOrigin, 1.0f, LIGHTGRAY);
+    const Vector3 LEFT_ENEMY_POSITION =
+    {
+        -8.0f,
+        3.0f,
+        14.0f
+    };
+
+    const Vector3 RIGHT_ENEMY_POSITION =
+    {
+        8.0f,
+        3.0f,
+        14.0f
+    };
+
+    const Vector3 LEFT_LIGHT_POSITION =
+    {
+        -8.0f,
+        4.0f,
+        14.0f
+    };
+
+    const Vector3 RIGHT_LIGHT_POSITION =
+    {
+        8.0f,
+        4.0f,
+        14.0f
+    };
+
+    BeginMode3D(camera);
+
+    DrawModel(
+        m_officeModel,
+        m_worldOrigin,
+        1.0f,
+        LIGHTGRAY
+    );
+
+    // Enemies are ONLY visible if
+    // their respective door light is on.
+
+    if (m_officeState.leftLightOn)
+    {
+        drawOfficeDoorEnemies(
+            Room::LeftDoor,
+            LEFT_ENEMY_POSITION,
+            2.5f
+        );
+    }
+
+    if (m_officeState.rightLightOn)
+    {
+        drawOfficeDoorEnemies(
+            Room::RightDoor,
+            RIGHT_ENEMY_POSITION,
+            2.5f
+        );
+    }
 
     EndMode3D();
+
+    // Fake 2D light overlays
+
+    if (m_officeState.leftLightOn)
+    {
+        drawDoorLight(
+            LEFT_LIGHT_POSITION
+        );
+    }
+
+    if (m_officeState.rightLightOn)
+    {
+        drawDoorLight(
+            RIGHT_LIGHT_POSITION
+        );
+    }
+
+    drawPowerUI();
 }
 
 void Game::drawCCTV() const
@@ -331,6 +412,20 @@ void Game::drawCCTV() const
 
     m_cctv.draw(m_enemies);
 
+}
+
+void Game::drawPowerUI() const
+{
+    DrawText(
+        TextFormat(
+            "POWER: %.0f%%",
+            m_powerState.battery
+        ),
+        20,
+        GetScreenHeight() - 45,
+        28,
+        WHITE
+    );
 }
 
 void Game::shutdown()
@@ -554,4 +649,142 @@ const EnemyBillboardPose* Game::findEnemyPose(const EnemyVisual& visual, Room ro
     }
 
     return nullptr;
+}
+
+void Game::updatePower(float dt)
+{
+    if (m_powerState.isOut())
+    {
+        return;
+    }
+
+    float drain = m_powerState.baseDrain;
+
+    if (m_cctv.isOpen())
+    {
+        drain += m_powerState.baseDrain;
+    }
+
+    if (m_officeState.leftDoorClosed)
+    {
+        drain += m_powerState.doorDrain;
+    }
+
+    if (m_officeState.rightDoorClosed)
+    {
+        drain += m_powerState.doorDrain;
+    }
+
+    if (m_officeState.leftLightOn)
+    {
+        drain += m_powerState.lightDrain;
+    }
+
+    if (m_officeState.rightLightOn)
+    {
+        drain += m_powerState.lightDrain;
+    }
+
+    m_powerState.battery -= drain * dt;
+
+    if (m_powerState.battery <= 0.0f)
+    {
+        m_powerState.battery = 0.0f;
+
+        // FNAF-style power failure
+        m_officeState.leftDoorClosed = false;
+        m_officeState.rightDoorClosed = false;
+
+        m_officeState.leftLightOn = false;
+        m_officeState.rightLightOn = false;
+    }
+}
+/*
+void Game::drawDoorLight(Vector3 worldPosition) const
+{
+    const Camera3D& camera =
+        m_officeCamera.getCamera();
+
+    Vector2 screenPosition =
+        GetWorldToScreen(
+            worldPosition,
+            camera
+        );
+
+    BeginBlendMode(BLEND_ADDITIVE);
+
+    DrawCircleGradient(
+        screenPosition,
+        260.0f,
+        Color{ 255, 235, 170, 110 },
+        Color{ 255, 220, 120, 0 }
+    );
+
+    EndBlendMode();
+}
+*/
+
+void Game::drawDoorLight(Vector3 worldPosition) const
+{
+    const Camera3D& camera =
+        m_officeCamera.getCamera();
+
+    Vector2 screenPosition =
+        GetWorldToScreen(
+            worldPosition,
+            camera
+        );
+
+    BeginBlendMode(BLEND_ADDITIVE);
+
+    DrawCircleGradient(
+        static_cast<int>(screenPosition.x),
+        static_cast<int>(screenPosition.y),
+        260.0f,
+        Color{ 255, 235, 170, 110 },
+        Color{ 255, 220, 120, 0 }
+    );
+
+    EndBlendMode();
+}
+
+void Game::drawOfficeDoorEnemies(
+    Room doorRoom,
+    Vector3 position,
+    float scale
+) const
+{
+    const Camera3D& camera =
+        m_officeCamera.getCamera();
+
+    for (const auto& enemy : m_enemies)
+    {
+        if (!enemy->isActive())
+        {
+            continue;
+        }
+
+        if (enemy->getCurrentRoom() != doorRoom)
+        {
+            continue;
+        }
+
+        const EnemyVisual* visual =
+            findEnemyVisual(
+                enemy->getType()
+            );
+
+        if (visual == nullptr)
+        {
+            continue;
+        }
+
+        DrawBillboard(
+            camera,
+            visual->texture,
+            position,
+            scale,
+            WHITE
+        );
+    }
 }

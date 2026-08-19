@@ -27,7 +27,7 @@ enum class GameState
 	Playing,
 	Win,
 	Lose,
-};
+}; 
 
 struct OfficeState
 {
@@ -43,6 +43,21 @@ struct NightState
 	int currentMinute = 0;
 	int currentSecond = 0;
 	float elapsedTime = 0.0f;
+};
+
+struct PowerState
+{
+	float battery = 100.0f;
+
+	// percentage points drained per second
+	float baseDrain = 0.015f;
+	float doorDrain = 0.04f;
+	float lightDrain = 0.06f;
+
+	bool isOut() const
+	{
+		return battery <= 0.0f;
+	}
 };
 
 class Game
@@ -70,6 +85,14 @@ private:
 
 	const EnemyBillboardPose* findEnemyPose(const EnemyVisual& visual,Room room) const;
 
+	//game state
+	void updatePower(float dt);
+	void drawPowerUI() const;
+
+	void drawDoorLight(Vector3 worldPosition) const;
+
+	void drawOfficeDoorEnemies(Room doorRoom,Vector3 position,float scale) const;
+
 private:
 	GameState m_gameState = GameState::Playing;
 	OfficeCamera m_officeCamera{};
@@ -82,7 +105,6 @@ private:
 	Vector3 m_worldOrigin = { 0.0f, 0.0f, 0.0f };
 
 	Model m_officeModel{};
-
 
 	//enemy
 	EnemyContext enemyContext{ false ,false,false,Room::MainHall };
@@ -101,6 +123,8 @@ private:
 
 	//audio
 	AudioManager m_audio;
+
+	PowerState m_powerState{};
 
 };
 

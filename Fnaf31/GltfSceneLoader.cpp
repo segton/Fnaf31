@@ -1,5 +1,7 @@
 #include "GltfSceneLoader.h"
 
+/*
+
 #include "cgltf.h"
 
 #include "raylib.h"
@@ -139,3 +141,5 @@ std::vector<SceneLight> GltfSceneLoader::loadLights(const std::string& path)
 
     return lights;
 }
+
+*/
