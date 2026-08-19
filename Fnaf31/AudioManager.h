@@ -18,9 +18,9 @@ public:
 	void playMusic(const std::string& id);
 	void stopMusic(const std::string& id);
 
-	void setMasterVolume();
-	void setSoundVolume();
-	void setMusicVolume();
+	void setMasterVolume(float volume);
+	void setSoundVolume(float volume);
+	void setMusicVolume(float volume);
 
 private:
 	std::unordered_map<std::string, Sound> m_sounds;

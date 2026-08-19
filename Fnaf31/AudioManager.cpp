@@ -1,5 +1,5 @@
 #include "AudioManager.h"
-#include "raylib.h"
+#include "raymath.h"
 
 void AudioManager::init()
 {
@@ -91,18 +91,41 @@ void AudioManager::stopMusic(const std::string& id)
 }
 
 
-void AudioManager::setMasterVolume()
+void AudioManager::setMasterVolume(float volume)
+{
+    volume = Clamp(volume, 0.0f, 1.0f);
+
+    SetMasterVolume(volume);
+}
+void AudioManager::setSoundVolume(float volume)
 {
 }
 
-void AudioManager::setSoundVolume()
-{
-}
-
-void AudioManager::setMusicVolume()
+void AudioManager::setMusicVolume(float volume)
 {
 }
 
 void AudioManager::shutdown()
 {
+    if (!m_initialized)
+    {
+        return;
+    }
+
+    for (auto& [id, sound] : m_sounds)
+    {
+        UnloadSound(sound);
+    }
+
+    for (auto& [id, music] : m_music)
+    {
+        UnloadMusicStream(music);
+    }
+
+    m_sounds.clear();
+    m_music.clear();
+
+    CloseAudioDevice();
+
+    m_initialized = false;
 }

@@ -21,7 +21,7 @@ void Game::init()
     m_roomRenderer.init();
 
     m_officeModel = LoadModel("Assets/3D/Office3.glb");
-    m_roomRenderer.applyShader(m_officeModel);
+    //m_roomRenderer.applyShader(m_officeModel);
 
     //const auto lights = GltfSceneLoader::loadLights("Assets/3D/Office3.glb");
 
@@ -30,10 +30,12 @@ void Game::init()
     mainStage.room = Room::MainStage;
     mainStage.model = LoadModel("Assets/3D/MainStage.glb");
 
+    /*
     mainStage.lights =
         GltfSceneLoader::loadLights(
             "Assets/3D/MainStage.glb"
         );
+    */
 
     mainStage.camera.position = { 0.0f, 3.0f, 8.0f };
     mainStage.camera.target = { 0.0f, 2.0f, 0.0f };
@@ -44,9 +46,16 @@ void Game::init()
     mainStage.modelPosition = { 0.0f, 0.0f, 0.0f };
     mainStage.modelScale = 1.0f;
 
-    m_roomRenderer.applyShader(mainStage.model); 
+    //m_roomRenderer.applyShader(mainStage.model); 
 
     m_roomScenes.push_back(mainStage);
+
+
+    //load audio
+
+    m_audio.init();
+
+    m_audio.loadSound("door_close", "Assets/Audio/door_close");
 
 }
 

@@ -4,8 +4,8 @@
 
 void RoomRenderer::init()
 {
-    const char* vertexPath = "Assets/shaders/pbr.vs";
-    const char* fragmentPath = "Assets/shaders/pbr.fs";
+    const char* vertexPath = "Assets/Shaders/pbr.vs";
+    const char* fragmentPath = "Assets/Shaders/pbr.fs";
 
     std::cout << "[PBR] VS exists: "
         << FileExists(vertexPath)

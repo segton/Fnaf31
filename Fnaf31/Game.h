@@ -15,6 +15,11 @@
 #include "RoomRenderer.h"
 #include "RoomScene.h"
 
+
+//--audio manager
+#include "AudioManager.h"
+
+
 enum class GameState
 {
 	Menu,
@@ -71,7 +76,7 @@ private:
 
 
 	//enemy
-	EnemyContext enemyContext{ false ,false,false,Room::MainHall};
+	EnemyContext enemyContext{ false ,false,false,Room::MainHall };
 
 	//DurianEnemy durian{ Room::MainStage, 7, 5.f };
 
@@ -82,5 +87,9 @@ private:
 	std::vector<RoomScene> m_roomScenes{};
 
 	//const Room m_selectedRoom{};
+
+	//audio
+	AudioManager m_audio;
+
 };
 
