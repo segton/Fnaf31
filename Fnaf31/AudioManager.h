@@ -10,11 +10,11 @@ public:
 	void update();
 	void shutdown();
 
-	void loadSound(const std::string& id, const std::string& path);
+	bool loadSound(const std::string& id, const std::string& path);
 	void playSound(const std::string& id);
 	void stopSound(const std::string& id);
 
-	void loadMusic(const std::string& id, const std::string& path);
+	bool loadMusic(const std::string& id, const std::string& path);
 	void playMusic(const std::string& id);
 	void stopMusic(const std::string& id);
 
@@ -25,6 +25,8 @@ public:
 private:
 	std::unordered_map<std::string, Sound> m_sounds;
 	std::unordered_map<std::string, Music> m_music;
+
+	bool m_initialized = false;
 
 };
 

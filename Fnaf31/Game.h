@@ -1,12 +1,19 @@
 #pragma once
 #include<memory>
 #include "raylib.h"
+
+//main office camera and camera panel logic
 #include "OfficeCamera.h"
 #include "CCTV.h"
+
+//--enemy classes
 #include "Enemy.h"
 #include "DurianEnemy.h"
 #include "EnemyContext.h"
-#include "EnemyInfo.h"
+
+//--rendering rooms
+#include "RoomRenderer.h"
+#include "RoomScene.h"
 
 enum class GameState
 {
@@ -36,17 +43,18 @@ class Game
 {
 public:
 	Game() = default;
-	~Game();
 	void init();
 	void update();
 	void draw() const;
-	void shutdown() const;
+	void shutdown();
 
 
 private:
 	void drawOffice() const;
 	void drawCCTV() const;
 	void initEnemies();
+
+	const RoomScene* findRoomScene(const Room& room) const;
 
 private:
 	GameState m_gameState = GameState::Playing;
@@ -69,6 +77,10 @@ private:
 
 	std::vector<std::unique_ptr<Enemy>> m_enemies;
 
+	//room rendering
+	RoomRenderer m_roomRenderer{};
+	std::vector<RoomScene> m_roomScenes{};
 
+	//const Room m_selectedRoom{};
 };
 

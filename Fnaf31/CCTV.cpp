@@ -113,44 +113,33 @@ void CCTV::drawSelectedRooms() const
     switch (m_selectedRoom)
     {
     case Room::MainStage:
-        ClearBackground(DARKGRAY);
         DrawText("MAIN STAGE", 50, 50, 30, WHITE);
         break;
 
     case Room::FoodCourt:
-        ClearBackground(DARKGREEN);
         DrawText("FOOD COURT", 50, 50, 30, WHITE);
         break;
 
     case Room::GameStalls:
-        ClearBackground(BROWN);
         DrawText("GAME STALLS", 50, 50, 30, WHITE);
         break;
 
     case Room::MainHall:
-        ClearBackground(RED);
         DrawText("MAIN HALL", 50, 50, 30, WHITE);
         break;
 
     case Room::LeftHall:
-        ClearBackground(DARKPURPLE);
         DrawText("LEFT HALL", 50, 50, 30, WHITE);
         break;
 
     case Room::RightHall:
-        ClearBackground(MAROON);
         DrawText("RIGHT HALL", 50, 50, 30, WHITE);
         break;
 
-    case Room::LeftDoor:
-        ClearBackground(MAROON);
-        break;
-
     default:
-        ClearBackground(BLACK);
         DrawText("ERROR", 50, 50, 30, WHITE);
+        break;
     }
-
 }
 
 void CCTV::drawEnemy(const Enemy& enemy) const

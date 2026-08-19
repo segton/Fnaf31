@@ -1,6 +1,7 @@
 #include "Game.h"
 
 #include <iostream>
+#include "GltfSceneLoader.h"
 
 
 void Game::init()
@@ -16,7 +17,37 @@ void Game::init()
     //create enemies
     initEnemies();
 
-    m_officeModel = LoadModel("Assets/3D/Office2.glb");
+    //create other rooms
+    m_roomRenderer.init();
+
+    m_officeModel = LoadModel("Assets/3D/Office3.glb");
+    m_roomRenderer.applyShader(m_officeModel);
+
+    //const auto lights = GltfSceneLoader::loadLights("Assets/3D/Office3.glb");
+
+    RoomScene mainStage{};
+
+    mainStage.room = Room::MainStage;
+    mainStage.model = LoadModel("Assets/3D/MainStage.glb");
+
+    mainStage.lights =
+        GltfSceneLoader::loadLights(
+            "Assets/3D/MainStage.glb"
+        );
+
+    mainStage.camera.position = { 0.0f, 3.0f, 8.0f };
+    mainStage.camera.target = { 0.0f, 2.0f, 0.0f };
+    mainStage.camera.up = { 0.0f, 1.0f, 0.0f };
+    mainStage.camera.fovy = 45.0f;
+    mainStage.camera.projection = CAMERA_PERSPECTIVE;
+
+    mainStage.modelPosition = { 0.0f, 0.0f, 0.0f };
+    mainStage.modelScale = 1.0f;
+
+    m_roomRenderer.applyShader(mainStage.model); 
+
+    m_roomScenes.push_back(mainStage);
+
 }
 
 void Game::initEnemies()
@@ -105,15 +136,48 @@ void Game::drawOffice() const
 
 void Game::drawCCTV() const
 {
-	m_cctv.draw(m_enemies);
+
+    const Room selectedRoom = m_cctv.getSelectedRoom();
+
+    const RoomScene* scene = findRoomScene(selectedRoom);
+
+    if (scene == nullptr)
+    {
+        DrawText("NO 3D SCENE FOR THIS ROOM", 50, 120, 30, RED);
+    }
+    else
+    {
+        m_roomRenderer.draw(*scene);
+    }
+
+    m_cctv.draw(m_enemies);
+
 }
 
-Game::~Game()
-{
-    shutdown();
-}
-
-void Game::shutdown() const
+void Game::shutdown()
 {
     UnloadModel(m_officeModel);
+
+    for (RoomScene& scene : m_roomScenes)
+    {
+        UnloadModel(scene.model);
+    }
+
+    m_roomRenderer.shutdown();
+
+    m_roomScenes.clear();
+}
+
+
+const RoomScene* Game::findRoomScene(const Room& room) const
+{
+    for (const RoomScene& scene : m_roomScenes)
+    {
+        if (scene.room == room)
+        {
+            return &scene;
+        }
+    }
+
+    return nullptr;
 }
