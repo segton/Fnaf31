@@ -55,8 +55,15 @@ void Game::init()
 
     m_audio.init();
 
-    m_audio.loadSound("door_close", "Assets/Audio/door_close");
+    m_audio.loadSound("door_close", "Assets/Audio/door_close.mp3");
 
+    m_audio.loadSound("door_open", "Assets/Audio/door_close.mp3");
+
+    m_audio.loadSound("cctv_open", "Assets/Audio/camera_open.mp3");
+
+    m_audio.loadMusic("ambience", "Assets/Audio/ambience.ogg");
+
+    m_audio.playMusic("ambience");
 }
 
 void Game::initEnemies()
@@ -76,9 +83,12 @@ void Game::update()
 {
 	float dt = GetFrameTime();
 
+    m_audio.update();
+
     if (IsKeyPressed(KEY_SPACE))
     {
         m_cctv.toggle();
+        m_audio.playSound("cctv_open");
     }
 
     if (m_gameState == GameState::Playing)
@@ -100,12 +110,29 @@ void Game::update()
             {
                 m_officeState.leftDoorClosed = !m_officeState.leftDoorClosed;
                 std::cout << "Left door is " << (m_officeState.leftDoorClosed ? "closed\n" : "opened\n");
+                if (m_officeState.leftDoorClosed)
+                {
+                    m_audio.playSound("door_close");
+                }
+                else
+                {
+                    m_audio.playSound("door_open");
+                }
+
             }
 
             if (IsKeyPressed(KEY_D))
             {
                 m_officeState.rightDoorClosed = !m_officeState.rightDoorClosed;
                 std::cout << "Right door is " << (m_officeState.rightDoorClosed ? "closed\n" : "opened\n");
+                if (m_officeState.rightDoorClosed)
+                {
+                    m_audio.playSound("door_close");
+                }
+                else
+                {
+                    m_audio.playSound("door_open");
+                }
             }
 
         }
