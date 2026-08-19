@@ -2,7 +2,9 @@
 
 #include <iostream>
 #include "GltfSceneLoader.h"
-
+#include "MangosteenEnemy.h"
+#include "JambuEnemy.h"
+#include "RambutanEnemy.h"
 
 void Game::init()
 {
@@ -17,14 +19,16 @@ void Game::init()
     //create enemies
     initEnemies();
 
+    initEnemyVisuals();
+
     //create other rooms
     m_roomRenderer.init();
-
+    initRooms();
     m_officeModel = LoadModel("Assets/3D/Office3.glb");
     //m_roomRenderer.applyShader(m_officeModel);
 
     //const auto lights = GltfSceneLoader::loadLights("Assets/3D/Office3.glb");
-
+    /*
     RoomScene mainStage{};
 
     mainStage.room = Room::MainStage;
@@ -35,7 +39,7 @@ void Game::init()
         GltfSceneLoader::loadLights(
             "Assets/3D/MainStage.glb"
         );
-    */
+    
 
     mainStage.camera.position = { 0.0f, 3.0f, 8.0f };
     mainStage.camera.target = { 0.0f, 2.0f, 0.0f };
@@ -49,7 +53,7 @@ void Game::init()
     //m_roomRenderer.applyShader(mainStage.model); 
 
     m_roomScenes.push_back(mainStage);
-
+    */
 
     //load audio
 
@@ -70,14 +74,114 @@ void Game::initEnemies()
 {
     m_enemies.clear();
 
-    m_enemies.emplace_back(
-        std::make_unique<DurianEnemy>(
-            Room::MainStage,
-            20,
-            1.0f
-        )
-    );
+    m_enemies.emplace_back(std::make_unique<DurianEnemy>(Room::MainStage,4,5.0f));
+
+    m_enemies.emplace_back(std::make_unique<MangosteenEnemy>(Room::MainStage,5,4.0f));
+
+    m_enemies.emplace_back(std::make_unique<JambuEnemy>(Room::MainStage,5,4.0f));
+
+    m_enemies.emplace_back(std::make_unique<RambutanEnemy>(Room::GameStalls,4,5.0f));
 }
+
+void Game::initRooms()
+{
+    m_roomScenes.clear();
+    m_roomScenes.reserve(8);
+
+    auto addRoom =[this](
+        Room room,
+        const char* modelPath,
+        Vector3 cameraPosition,
+        Vector3 cameraTarget)
+    {
+        m_roomScenes.emplace_back();
+
+        RoomScene& scene =
+            m_roomScenes.back();
+
+        scene.room = room;
+
+        scene.model =
+            LoadModel(modelPath);
+
+        scene.camera.position =
+            cameraPosition;
+
+        scene.camera.target =
+            cameraTarget;
+
+        scene.camera.up =
+        {
+            0.0f,
+            1.0f,
+            0.0f
+        };
+
+        scene.camera.fovy = 45.0f;
+
+        scene.camera.projection =
+            CAMERA_PERSPECTIVE;
+
+        scene.modelPosition =
+        {
+            0.0f,
+            0.0f,
+            0.0f
+        };
+
+        scene.modelScale = 1.0f;
+    };
+
+    addRoom(
+        Room::MainStage,
+        "Assets/3D/MainStage.glb",
+        { 0.0f, 3.0f, 8.0f },
+        { 0.0f, 2.0f, 0.0f });
+
+    addRoom(
+        Room::FoodCourt,
+        "Assets/3D/FoodCourt.glb",
+        { 0.0f, 3.0f, 8.0f },
+        { 0.0f, 2.0f, 0.0f });
+
+    addRoom(
+        Room::GameStalls,
+        "Assets/3D/GameStalls.glb",
+        { 0.0f, 3.0f, 8.0f },
+        { 0.0f, 2.0f, 0.0f });
+
+    addRoom(
+        Room::MainHall,
+        "Assets/3D/MainHall.glb",
+        { 0.0f, 3.0f, 8.0f },
+        { 0.0f, 2.0f, 0.0f });
+
+    addRoom(
+        Room::LeftHall,
+        "Assets/3D/LeftHall.glb",
+        { 0.0f, 3.0f, 8.0f },
+        { 0.0f, 2.0f, 0.0f });
+
+    addRoom(
+        Room::RightHall,
+        "Assets/3D/RightHall.glb",
+        { 0.0f, 3.0f, 8.0f },
+        { 0.0f, 2.0f, 0.0f });
+
+    addRoom(
+        Room::LeftDoor,
+        "Assets/3D/LeftDoor.glb",
+        { 0.0f, 3.0f, 8.0f },
+        { 0.0f, 2.0f, 0.0f });
+
+    addRoom(
+        Room::RightDoor,
+        "Assets/3D/RightDoor.glb",
+        { 0.0f, 3.0f, 8.0f },
+        { 0.0f, 2.0f, 0.0f });
+
+}
+
 
 void Game::update()
 {
@@ -184,6 +288,45 @@ void Game::drawCCTV() const
     else
     {
         m_roomRenderer.draw(*scene);
+
+        for (const auto& enemy : m_enemies)
+        {
+            if (!enemy->isActive())
+            {
+                continue;
+            }
+
+            if (enemy->getCurrentRoom() != selectedRoom)
+            {
+                continue;
+            }
+
+            const EnemyVisual* visual = findEnemyVisual(enemy->getType());
+
+            if (visual == nullptr)
+            {
+                continue;
+            }
+
+            const EnemyBillboardPose* pose = findEnemyPose(*visual,selectedRoom);
+
+            if (pose == nullptr)
+            {
+                continue;
+            }
+
+            BeginMode3D(scene->camera);
+
+            DrawBillboard(
+                scene->camera,
+                visual->texture,
+                pose->position,
+                pose->scale,
+                WHITE);
+
+            EndMode3D();
+        }
+
     }
 
     m_cctv.draw(m_enemies);
@@ -192,6 +335,7 @@ void Game::drawCCTV() const
 
 void Game::shutdown()
 {
+
     UnloadModel(m_officeModel);
 
     for (RoomScene& scene : m_roomScenes)
@@ -199,9 +343,20 @@ void Game::shutdown()
         UnloadModel(scene.model);
     }
 
+    m_roomScenes.clear();
+
     m_roomRenderer.shutdown();
 
-    m_roomScenes.clear();
+    for (EnemyVisual& visual : m_enemyVisuals)
+    {
+        UnloadTexture(
+            visual.texture
+        );
+    }
+
+    m_enemyVisuals.clear();
+
+    m_audio.shutdown();
 }
 
 
@@ -212,6 +367,189 @@ const RoomScene* Game::findRoomScene(const Room& room) const
         if (scene.room == room)
         {
             return &scene;
+        }
+    }
+
+    return nullptr;
+}
+
+void Game::initEnemyVisuals()
+{
+    m_enemyVisuals.clear();
+    m_enemyVisuals.reserve(4);
+
+    // -- DURIAN --
+
+    {
+        EnemyVisual visual{};
+
+        visual.type =
+            EnemyType::Durian;
+
+        visual.texture =
+            LoadTexture("Assets/Images/durian.png");
+
+        visual.poses.push_back({
+            Room::MainStage,
+            { 0.0f, 1.5f, 0.0f },
+            2.0f});
+
+        visual.poses.push_back({
+            Room::FoodCourt,
+            { 0.0f, 1.5f, 0.0f },
+            2.0f});
+
+        visual.poses.push_back({
+            Room::MainHall,
+            { 0.0f, 1.5f, 0.0f },
+            2.0f});
+
+        visual.poses.push_back({
+            Room::RightHall,
+            { 0.0f, 1.5f, 0.0f },
+            2.0f});
+
+        visual.poses.push_back({
+            Room::RightDoor,
+            { 0.0f, 1.5f, 0.0f },
+            2.0f});
+
+        m_enemyVisuals.push_back(
+            std::move(visual));
+    }
+
+    // -- MANGOSTEEN --
+
+    {
+        EnemyVisual visual{};
+
+        visual.type =
+            EnemyType::Mangosteen;
+
+        visual.texture =
+            LoadTexture("Assets/Images/mangosteen.png");
+
+        visual.poses.push_back({
+            Room::MainStage,
+            { -1.0f, 1.5f, 0.0f },
+            2.0f});
+
+        visual.poses.push_back({
+            Room::GameStalls,
+            { 0.0f, 1.5f, 0.0f },
+            2.0f});
+
+        visual.poses.push_back({
+            Room::MainHall,
+            { -1.0f, 1.5f, 0.0f },
+            2.0f});
+
+        visual.poses.push_back({
+            Room::LeftHall,
+            { 0.0f, 1.5f, 0.0f },
+            2.0f});
+
+        visual.poses.push_back({
+            Room::LeftDoor,
+            { 0.0f, 1.5f, 0.0f },
+            2.0f});
+
+        m_enemyVisuals.push_back(
+            std::move(visual));
+    }
+
+    // -- JAMBU --
+
+    {
+        EnemyVisual visual{};
+
+        visual.type =
+            EnemyType::Jambu;
+
+        visual.texture =
+            LoadTexture("Assets/Images/jambu.png");
+
+        visual.poses.push_back({
+            Room::MainStage,
+            { 1.0f, 1.5f, 0.0f },
+            2.0f});
+
+        visual.poses.push_back({
+            Room::FoodCourt,
+            { 0.0f, 1.5f, 0.0f },
+            2.0f});
+
+        visual.poses.push_back({
+            Room::MainHall,
+            { 1.0f, 1.5f, 0.0f },
+            2.0f});
+
+        visual.poses.push_back({
+            Room::RightHall,
+            { 0.0f, 1.5f, 0.0f },
+            2.0f});
+
+        visual.poses.push_back({
+            Room::RightDoor,
+            { 0.0f, 1.5f, 0.0f },
+            2.0f});
+
+        m_enemyVisuals.push_back(
+            std::move(visual)
+        );}
+
+    // -- RAMBUTAN --
+
+    {
+        EnemyVisual visual{};
+
+        visual.type =
+            EnemyType::Rambutan;
+
+        visual.texture =
+            LoadTexture(
+                "Assets/Images/rambutan.png"
+            );
+
+        visual.poses.push_back({
+            Room::GameStalls,
+            { 0.0f, 1.5f, 0.0f },
+            2.0f});
+
+        visual.poses.push_back({
+            Room::LeftHall,
+            { 0.0f, 1.5f, 0.0f },
+            2.2f});
+
+        visual.poses.push_back({
+            Room::LeftDoor,
+            { 0.0f, 1.5f, 0.0f },
+            2.7f});
+
+        m_enemyVisuals.push_back(
+            std::move(visual));
+    }
+}
+
+const EnemyVisual* Game::findEnemyVisual(EnemyType type) const
+{
+    for (const EnemyVisual& visual : m_enemyVisuals)
+    {
+        if (visual.type == type)
+        {
+            return &visual;
+        }
+    }
+
+    return nullptr;
+}
+const EnemyBillboardPose* Game::findEnemyPose(const EnemyVisual& visual, Room room) const
+{
+    for (const EnemyBillboardPose& pose : visual.poses)
+    {
+        if (pose.room == room)
+        {
+            return &pose;
         }
     }
 

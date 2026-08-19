@@ -5,27 +5,31 @@
 DurianEnemy::DurianEnemy(Room startingRoom, int aiLevel, float movementInterval)
 	: Enemy(startingRoom, aiLevel, movementInterval)
 { 
-	m_route.reserve(4);
-	m_route.push_back(Room::MainStage);
-	m_route.push_back(Room::FoodCourt);
-	m_route.push_back(Room::LeftHall);
-	m_route.push_back(Room::LeftDoor);
+	m_route =
+	{
+		Room::MainStage,
+		Room::FoodCourt,
+		Room::MainHall,
+		Room::RightHall,
+		Room::RightDoor
+	};
 }
 
-void DurianEnemy::onMovementOpportunity(const EnemyContext& enemyContext)
+void DurianEnemy::onMovementOpportunity(
+	const EnemyContext& context)
 {
-	if (!rollMovement())
+	const bool beingWatched =
+		context.cctvOpen &&
+		context.selectedRoom == m_currentRoom;
+
+	if (beingWatched)
 	{
 		return;
 	}
-	
-	std::cout << "Durian enemy has moved to "
-		<< roomName(m_currentRoom)
-		<< '\n';
 
-	if (m_currentRoom == Room::LeftDoor)
+	if (m_currentRoom == Room::RightDoor)
 	{
-		handleAttack(enemyContext);
+		handleAttack(context);
 		return;
 	}
 
@@ -34,14 +38,13 @@ void DurianEnemy::onMovementOpportunity(const EnemyContext& enemyContext)
 
 void DurianEnemy::handleAttack(const EnemyContext& enemyContext)
 {
-	if (enemyContext.leftDoorClosed)
+	if (enemyContext.rightDoorClosed)
 	{
 		retreat();
+		return;
 	}
-	else
-	{
-		std::cout << "game over\n";
-	}
+
+	m_hasAttacked = true;
 }
 
 EnemyType DurianEnemy::getType() const

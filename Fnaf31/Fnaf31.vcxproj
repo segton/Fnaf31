@@ -155,8 +155,11 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GltfSceneLoader.cpp" />
+    <ClCompile Include="JambuEnemy.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MangosteenEnemy.cpp" />
     <ClCompile Include="OfficeCamera.cpp" />
+    <ClCompile Include="RambutanEnemy.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="RoomRenderer.cpp" />
     <ClCompile Include="SceneLight.cpp" />
@@ -171,9 +174,13 @@
     <ClInclude Include="EnemyInfo.h" />
     <ClInclude Include="EnemyType.h" />
     <ClInclude Include="EnemyView.h" />
+    <ClInclude Include="EnemyVisual.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GltfSceneLoader.h" />
+    <ClInclude Include="JambuEnemy.h" />
+    <ClInclude Include="MangosteenEnemy.h" />
     <ClInclude Include="OfficeCamera.h" />
+    <ClInclude Include="RambutanEnemy.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="RoomRenderer.h" />

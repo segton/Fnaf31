@@ -21,7 +21,7 @@ public:
 
 private:
     void uploadCameraUniforms(const Camera3D& camera) const;
-    void uploadLightUniforms(const std::vector<SceneLight>& lights) const;
+    //void uploadLightUniforms(const std::vector<SceneLight>& lights) const;
 
 private:
 	Shader m_pbrShader{};

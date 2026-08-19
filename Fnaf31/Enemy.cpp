@@ -3,15 +3,26 @@
 
 void Enemy::update(float dt, const EnemyContext& enemyContext)
 {
-	if (!m_active) return;
+    if (!m_active || m_hasAttacked)
+    {
+        return;
+    }
 
-	m_movementTimer += dt;
+    m_movementTimer += dt;
 
-	if (m_movementTimer >= m_movementInterval)
-	{
-		m_movementTimer = 0.0f;
-		onMovementOpportunity(enemyContext);
-	}
+    if (m_movementTimer < m_movementInterval)
+    {
+        return;
+    }
+
+    m_movementTimer = 0.0f;
+
+    if (!rollMovement())
+    {
+        return;
+    }
+
+    onMovementOpportunity(enemyContext);
 }
 
 Enemy::Enemy(Room startingRoom, int aiLevel, float movementInterval)

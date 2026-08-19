@@ -10,6 +10,7 @@
 #include "Enemy.h"
 #include "DurianEnemy.h"
 #include "EnemyContext.h"
+#include "EnemyVisual.h"
 
 //--rendering rooms
 #include "RoomRenderer.h"
@@ -57,9 +58,17 @@ public:
 private:
 	void drawOffice() const;
 	void drawCCTV() const;
+
 	void initEnemies();
+	void initRooms();
 
 	const RoomScene* findRoomScene(const Room& room) const;
+
+	void initEnemyVisuals();
+
+	const EnemyVisual* findEnemyVisual(EnemyType type) const;
+
+	const EnemyBillboardPose* findEnemyPose(const EnemyVisual& visual,Room room) const;
 
 private:
 	GameState m_gameState = GameState::Playing;
@@ -79,6 +88,8 @@ private:
 	EnemyContext enemyContext{ false ,false,false,Room::MainHall };
 
 	//DurianEnemy durian{ Room::MainStage, 7, 5.f };
+	std::vector<EnemyVisual> m_enemyVisuals{};
+
 
 	std::vector<std::unique_ptr<Enemy>> m_enemies;
 

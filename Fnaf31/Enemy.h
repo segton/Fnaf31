@@ -27,6 +27,8 @@ protected:
 
     bool rollMovement() const;
 
+protected:
+
     std::vector<Room> m_route;
     std::size_t m_routeIndex = 0;
 
@@ -35,5 +37,7 @@ protected:
     float m_movementTimer = 0.0f;
     float m_movementInterval;
     bool m_active = true;
+
+    bool m_hasAttacked = false;
 };
 

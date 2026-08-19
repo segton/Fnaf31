@@ -4,6 +4,7 @@
 
 void RoomRenderer::init()
 {
+    /*
     const char* vertexPath = "Assets/Shaders/pbr.vs";
     const char* fragmentPath = "Assets/Shaders/pbr.fs";
 
@@ -130,6 +131,8 @@ void RoomRenderer::init()
         &ambient,
         SHADER_UNIFORM_FLOAT
     );
+    */
+    
 
 
 }
@@ -148,7 +151,7 @@ void RoomRenderer::draw(const RoomScene& scene) const
 void RoomRenderer::drawModel(const Model& model, const Camera3D& camera, Vector3 position, float scale, const std::vector<SceneLight>& lights) const
 {
     uploadCameraUniforms(camera);
-    uploadLightUniforms(lights);
+    //uploadLightUniforms(lights);
 
     BeginMode3D(camera);
 
@@ -192,6 +195,7 @@ void RoomRenderer::uploadCameraUniforms(const Camera3D& camera) const
     );
 }
 
+/*
 void RoomRenderer::uploadLightUniforms(
     const std::vector<SceneLight>& lights
 ) const
@@ -364,3 +368,5 @@ void RoomRenderer::uploadLightUniforms(
         SHADER_UNIFORM_INT
     );
 }
+*/
+
