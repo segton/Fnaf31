@@ -35,8 +35,7 @@ struct CCTVButton
 class CCTV
 {
 public:
-    ~CCTV();
-    void init(Game& game);
+    void init(Game& game, AudioManager& audio);
 	void update(float dt);
 	void draw(const std::vector<std::unique_ptr<Enemy>>& enemies) const;
     bool isOpen() const;
@@ -55,6 +54,8 @@ private:
 private:
     Room  m_selectedRoom = Room::MainStage;
     //DurianEnemy* m_durianPtr = nullptr;
+
+    AudioManager* m_audioPtr;
 
 	bool m_isOpen = false;
 	std::vector<CCTVButton> m_cameraButtons{};

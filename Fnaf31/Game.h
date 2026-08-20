@@ -33,6 +33,10 @@ struct OfficeState
 {
 	bool leftDoorClosed = false;
 	bool rightDoorClosed = false;
+
+	float leftDoorProgress = 0.0f;
+	float rightDoorProgress = 0.0f;
+
 	bool leftLightOn = false;
 	bool rightLightOn = false;
 };
@@ -50,9 +54,9 @@ struct PowerState
 	float battery = 100.0f;
 
 	// percentage points drained per second
-	float baseDrain = 0.015f;
-	float doorDrain = 0.04f;
-	float lightDrain = 0.06f;
+	float baseDrain = 0.02f;
+	float doorDrain = 0.2f;
+	float lightDrain = 0.1f;
 
 	bool isOut() const
 	{
@@ -73,6 +77,10 @@ public:
 private:
 	void drawOffice() const;
 	void drawCCTV() const;
+	void drawMenu() const;
+
+	void startGame();
+	void returnToMenu();
 
 	void initEnemies();
 	void initRooms();
@@ -88,10 +96,15 @@ private:
 	//game state
 	void updatePower(float dt);
 	void drawPowerUI() const;
+	void updateDoors(float dt);
+	void drawDoors() const;
 
 	void drawDoorLight(Vector3 worldPosition) const;
 
-	void drawOfficeDoorEnemies(Room doorRoom,Vector3 position,float scale) const;
+	void drawOfficeEnemiesAtRoom(Room doorRoom,Vector3 position,float scale) const;
+
+	void startJumpscare(EnemyType type);
+	void drawJumpscare() const;
 
 private:
 	GameState m_gameState = GameState::Playing;
@@ -104,7 +117,9 @@ private:
 
 	Vector3 m_worldOrigin = { 0.0f, 0.0f, 0.0f };
 
+	//Office models
 	Model m_officeModel{};
+	Model m_doorModel{};
 
 	//enemy
 	EnemyContext enemyContext{ false ,false,false,Room::MainHall };
@@ -125,6 +140,15 @@ private:
 	AudioManager m_audio;
 
 	PowerState m_powerState{};
+
+	//death screen
+	bool m_jumpscareActive = false;
+
+	EnemyType m_jumpscareEnemy = EnemyType::Durian;
+
+	float m_jumpscareTimer = 0.0f;
+
+
 
 };
 

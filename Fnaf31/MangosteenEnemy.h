@@ -4,7 +4,7 @@
 class MangosteenEnemy : public Enemy
 {
 public:
-    MangosteenEnemy(Room startRoom,int aiLevel,float moveInterval);
+    MangosteenEnemy(Room startRoom, int aiLevel, float moveInterval, AudioManager& audioManager);
 
     EnemyType getType() const override;
 
@@ -14,11 +14,6 @@ protected:
 private:
     void moveForward();
     void handleAttack(const EnemyContext& context) override;
-    void retreat();
-
-private:
-    std::vector<Room> m_route{};
-    std::size_t m_routeIndex = 0;
 };
 
 

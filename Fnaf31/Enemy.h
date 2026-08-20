@@ -4,20 +4,25 @@
 #include "EnemyContext.h"
 #include "EnemyType.h"
 
+
+class AudioManager;
+
 class Enemy
 {
 public:
     virtual ~Enemy() = default;
 
-	void update(float dt, const EnemyContext& enemyContext);
+	virtual void update(float dt, const EnemyContext& enemyContext);
 
     Room getCurrentRoom() const;
     bool isActive() const;
 
     virtual EnemyType getType() const = 0;
 
+    bool hasAttacked() const { return m_hasAttacked; }
+
 protected:
-    Enemy(Room startingRoom, int aiLevel, float movementInterval);
+    Enemy(Room startingRoom, int aiLevel, float movementInterval, AudioManager& audioManager);
 
     virtual void onMovementOpportunity(const EnemyContext& enemyContext) = 0;
 
@@ -26,6 +31,8 @@ protected:
     virtual void retreat();
 
     bool rollMovement() const;
+
+    void beginDoorWait();
 
 protected:
 
@@ -39,5 +46,12 @@ protected:
     bool m_active = true;
 
     bool m_hasAttacked = false;
+
+    bool m_waitingAtDoor = false;
+
+    float m_doorTimer = 0.0f;
+    float m_doorWaitDuration = 0.0f;
+
+    AudioManager* m_audioManagerPtr;
 };
 

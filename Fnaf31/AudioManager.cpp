@@ -66,6 +66,37 @@ bool AudioManager::loadMusic(const std::string& id, const std::string& path)
     return true;
 }
 
+void AudioManager::playLoopingSound(const std::string& id)
+{
+    const auto it = m_sounds.find(id);
+
+    if (it == m_sounds.end())
+    {
+        return;
+    }
+
+    //m_loopingSounds.insert(id);
+
+    if (!IsSoundPlaying(it->second))
+    {
+        PlaySound(it->second);
+    }
+}
+
+void AudioManager::stopLoopingSound(const std::string& id)
+{
+    const auto it = m_sounds.find(id);
+
+    if (it == m_sounds.end())
+    {
+        return;
+    }
+
+    //m_loopingSounds.erase(id);
+
+    StopSound(it->second);
+}
+
 void AudioManager::playMusic(const std::string& id)
 {
     const auto it = m_music.find(id);
@@ -128,4 +159,21 @@ void AudioManager::shutdown()
     CloseAudioDevice();
 
     m_initialized = false;
+}
+
+bool AudioManager::isSoundPlaying(
+    const std::string& id
+) const
+{
+    const auto it =
+        m_sounds.find(id);
+
+    if (it == m_sounds.end())
+    {
+        return false;
+    }
+
+    return IsSoundPlaying(
+        it->second
+    );
 }

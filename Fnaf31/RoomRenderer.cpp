@@ -4,6 +4,15 @@
 
 void RoomRenderer::init()
 {
+
+    m_cctvTarget = LoadRenderTexture(GetScreenWidth(),GetScreenHeight());
+
+    m_staticShader = LoadShader(nullptr,"Assets/Shaders/cctv_static.fs");
+
+    m_timeLoc = GetShaderLocation(m_staticShader,"time");
+
+    m_resolutionLoc = GetShaderLocation(m_staticShader, "resolution");
+
     /*
     const char* vertexPath = "Assets/Shaders/pbr.vs";
     const char* fragmentPath = "Assets/Shaders/pbr.fs";
@@ -175,8 +184,13 @@ void RoomRenderer::applyShader(Model& model)
 
 void RoomRenderer::shutdown()
 {
-	UnloadShader(m_pbrShader);
+    UnloadRenderTexture(
+        m_cctvTarget
+    );
 
+    UnloadShader(
+        m_staticShader
+    );
 }
 
 void RoomRenderer::uploadCameraUniforms(const Camera3D& camera) const
@@ -194,6 +208,42 @@ void RoomRenderer::uploadCameraUniforms(const Camera3D& camera) const
         SHADER_UNIFORM_VEC3
     );
 }
+
+void RoomRenderer::beginCCTVRender() const
+{
+    BeginTextureMode(m_cctvTarget);
+
+    ClearBackground(BLACK);
+}
+
+void RoomRenderer::endCCTVRender() const
+{
+    EndTextureMode();
+}
+
+void RoomRenderer::drawCCTVTarget(float time) const
+{
+    SetShaderValue(m_staticShader,m_timeLoc,&time,SHADER_UNIFORM_FLOAT);
+
+    const float resolution[2] =
+    {
+        static_cast<float>(m_cctvTarget.texture.width),
+
+        static_cast<float>(m_cctvTarget.texture.height)
+    };
+
+    SetShaderValue(m_staticShader, m_resolutionLoc, resolution, SHADER_UNIFORM_VEC2);
+    BeginShaderMode(m_staticShader);
+
+    DrawTextureRec(m_cctvTarget.texture,
+        {0.0f,0.0f,static_cast<float>(m_cctvTarget.texture.width),
+        -static_cast<float>(m_cctvTarget.texture.height)},
+        {0.0f,0.0f},WHITE);
+
+    EndShaderMode();
+}
+
+
 
 /*
 void RoomRenderer::uploadLightUniforms(

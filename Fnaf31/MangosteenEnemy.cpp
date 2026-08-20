@@ -1,7 +1,8 @@
 #include "MangosteenEnemy.h"
 
-MangosteenEnemy::MangosteenEnemy(Room startRoom,int aiLevel,float moveInterval)
-    : Enemy(startRoom, aiLevel, moveInterval)
+MangosteenEnemy::MangosteenEnemy(Room startingRoom, int aiLevel,
+    float movementInterval, AudioManager& audioManager)
+    : Enemy(startingRoom, aiLevel, movementInterval, audioManager)
 {
     m_route =
     {
@@ -20,11 +21,7 @@ EnemyType MangosteenEnemy::getType() const
 
 void MangosteenEnemy::onMovementOpportunity(const EnemyContext& context)
 {
-    if (m_currentRoom == Room::LeftDoor)
-    {
-        handleAttack(context);
-        return;
-    }
+    (void)context;
 
     moveForward();
 }
@@ -38,8 +35,12 @@ void MangosteenEnemy::moveForward()
 
     ++m_routeIndex;
 
-    m_currentRoom =
-        m_route[m_routeIndex];
+    m_currentRoom = m_route[m_routeIndex];
+
+    if (m_currentRoom == Room::LeftDoor)
+    {
+        beginDoorWait();
+    }
 }
 
 void MangosteenEnemy::handleAttack(const EnemyContext& context)
@@ -51,10 +52,4 @@ void MangosteenEnemy::handleAttack(const EnemyContext& context)
     }
 
     m_hasAttacked = true;
-}
-
-void MangosteenEnemy::retreat()
-{
-    m_routeIndex = 0;
-    m_currentRoom = m_route[0];
 }

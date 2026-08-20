@@ -2,13 +2,12 @@
 #include <iostream>
 #include "Game.h"
 
-CCTV::~CCTV()
-{
 
-}
-void CCTV::init(Game& game)
+void CCTV::init(Game& game, AudioManager& audio)
 {
     (void)game;
+
+    m_audioPtr = &audio;
 
     m_cameraButtons.clear();
     m_cameraButtons.reserve(6);
@@ -144,12 +143,14 @@ void CCTV::drawSelectedRooms() const
 
 void CCTV::drawEnemy(const Enemy& enemy) const
 {
-    switch (enemy.getType())
+    /*
+        switch (enemy.getType())
     {
     case EnemyType::Durian:
         DrawText("DURIAN MAN IS HERE", 50, 200, 50, WHITE);
         break;
     }
+    */
 }
 
 Room CCTV::getSelectedRoom() const
@@ -176,6 +177,8 @@ void CCTV::handleInput()
 
 void CCTV::selectRoom(const Room& room)
 {
+    m_audioPtr->playSound("change_cam");
+
     if (room == m_selectedRoom)
     {
         return;

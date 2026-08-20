@@ -5,7 +5,7 @@
 class JambuEnemy : public Enemy
 {
 public:
-    JambuEnemy(Room startRoom,int aiLevel,float moveInterval);
+    JambuEnemy(Room startRoom,int aiLevel,float moveInterval,AudioManager& audioManager);
 
     EnemyType getType() const override;
 
@@ -16,9 +16,5 @@ protected:
 
 private:
     void moveForward();
-    void retreat();
 
-private:
-    std::vector<Room> m_route{};
-    std::size_t m_routeIndex = 0;
 };

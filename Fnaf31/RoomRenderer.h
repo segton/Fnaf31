@@ -4,27 +4,39 @@
 class RoomRenderer
 {
 public:
-	void init();
+    void init();
 
-	void draw(const RoomScene& scene) const;
+    void draw(const RoomScene& scene) const;
 
     void drawModel(
-            const Model& model,
-            const Camera3D& camera,
-            Vector3 position,
-            float scale,
-            const std::vector<SceneLight>& lights) const;
+        const Model& model,
+        const Camera3D& camera,
+        Vector3 position,
+        float scale,
+        const std::vector<SceneLight>& lights) const;
 
-	void applyShader(Model& model);
+    void applyShader(Model& model);
 
-	void shutdown();
+    void beginCCTVRender() const;
+    void endCCTVRender() const;
+
+    void drawCCTVTarget(float time) const;
+
+    void shutdown();
 
 private:
     void uploadCameraUniforms(const Camera3D& camera) const;
     //void uploadLightUniforms(const std::vector<SceneLight>& lights) const;
 
 private:
-	Shader m_pbrShader{};
+
+    RenderTexture2D m_cctvTarget{};
+    Shader m_staticShader{};
+
+    int m_timeLoc = -1;
+    int m_resolutionLoc = -1;
+
+    Shader m_pbrShader{};
 
     int m_viewPosLoc = -1;
     int m_numLightsLoc = -1;
@@ -38,4 +50,3 @@ private:
     int m_ambientLoc = -1;
 
 };
-

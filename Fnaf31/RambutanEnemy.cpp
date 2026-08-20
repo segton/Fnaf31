@@ -1,11 +1,34 @@
 #include "RambutanEnemy.h"
+#include "AudioManager.h"
 
-RambutanEnemy::RambutanEnemy(
-    Room startingRoom,
-    int aiLevel,
-    float movementInterval)
-    : Enemy(startingRoom,aiLevel,movementInterval)
+#include "raymath.h"
+
+RambutanEnemy::RambutanEnemy(Room startingRoom, int aiLevel,
+    float movementInterval, AudioManager& audioManager)
+    : Enemy(startingRoom, aiLevel, movementInterval, audioManager)
 {
+}
+
+void RambutanEnemy::update(float dt,const EnemyContext& enemyContext)
+{
+    if (m_rushing)
+    {
+        m_rushTimer += dt;
+
+        if (m_rushTimer >= m_rushDuration)
+        {
+            m_rushing = false;
+
+            m_currentRoom =
+                Room::LeftDoor;
+
+            handleAttack(enemyContext);
+        }
+
+        return;
+    }
+
+    Enemy::update(dt,enemyContext);
 }
 
 void RambutanEnemy::onMovementOpportunity(const EnemyContext& context)
@@ -50,8 +73,24 @@ void RambutanEnemy::advanceStage()
 
 void RambutanEnemy::rush()
 {
-    m_currentRoom = Room::LeftDoor;
+    m_rushing = true;
+    m_rushTimer = 0.0f;
+
+    m_currentRoom = Room::LeftHall;
+
+    m_audioManagerPtr->playSound("rambutan_run");
 }
+
+float RambutanEnemy::getRushProgress() const
+{
+    if (!m_rushing)
+    {
+        return 0.0f;
+    }
+
+    return Clamp(m_rushTimer / m_rushDuration,0.0f,1.0f);
+}
+
 
 void RambutanEnemy::handleAttack(const EnemyContext& context)
 {
@@ -68,4 +107,15 @@ void RambutanEnemy::reset()
 {
     m_stage = 0;
     m_currentRoom = Room::GameStalls;
+}
+
+void RambutanEnemy::retreat()
+{
+    m_stage = 0;
+    m_rushing = false;
+
+    m_currentRoom =
+        Room::GameStalls;
+
+    m_audioManagerPtr->playSound("retreat");
 }

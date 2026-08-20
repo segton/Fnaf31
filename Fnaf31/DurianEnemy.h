@@ -7,7 +7,7 @@ class DurianEnemy : public Enemy
 public:
 	~DurianEnemy() override = default;
 
-	DurianEnemy(Room startingRoom, int aiLevel, float movementInterval);
+	DurianEnemy(Room startRoom, int aiLevel, float moveInterval, AudioManager& audioManager);
 	void onMovementOpportunity(const EnemyContext& enemyContext) override;
 
 	void handleAttack(const EnemyContext& enemyContext) override;

@@ -2,8 +2,9 @@
 #include <iostream>
 #include <string>
 
-DurianEnemy::DurianEnemy(Room startingRoom, int aiLevel, float movementInterval)
-	: Enemy(startingRoom, aiLevel, movementInterval)
+DurianEnemy::DurianEnemy(Room startingRoom, int aiLevel,
+	float movementInterval, AudioManager& audioManager)
+	: Enemy(startingRoom, aiLevel, movementInterval, audioManager)
 { 
 	m_route =
 	{
@@ -24,12 +25,6 @@ void DurianEnemy::onMovementOpportunity(
 
 	if (beingWatched)
 	{
-		return;
-	}
-
-	if (m_currentRoom == Room::RightDoor)
-	{
-		handleAttack(context);
 		return;
 	}
 
@@ -61,5 +56,11 @@ void DurianEnemy::moveForward()
 
 	++m_routeIndex;
 	m_currentRoom = m_route[m_routeIndex];
+
+	if (m_currentRoom == Room::RightDoor)
+	{
+		beginDoorWait();
+	}
+
 }
 

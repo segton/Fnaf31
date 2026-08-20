@@ -23,7 +23,7 @@ int main() {
 
 		// Draw
 		BeginDrawing();
-		ClearBackground(RAYWHITE);
+		ClearBackground(BLACK);
 
 
 
